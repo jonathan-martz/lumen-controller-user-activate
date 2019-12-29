@@ -31,7 +31,7 @@ class UserActivateController extends Controller
                     if ($active === 1) {
                         $update = DB::table('users')->where('id', '=', $token->userid)->update([
                             'active' => '1',
-                            'email_verified_at' => '1'
+                            'email_verified_at' => DB::raw('CURRENT_TIMESTAMP')
                         ]);
 
                         if ($update) {
