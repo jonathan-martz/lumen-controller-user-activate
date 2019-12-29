@@ -30,11 +30,18 @@ class UserActivateController extends Controller
                 if ($count === 1) {
                     if ($active === 1) {
                         $update = DB::table('users')->where('id', '=', $token->userid)->update([
-                            'active' => '1'
+                            'active' => '1',
+                            'email_verified_at' => '1'
                         ]);
 
                         if ($update) {
                             $this->addMessage('success', 'User activated now.');
+
+                            $token = DB::table('user_activate_token')
+                                ->where('token', '=', $this->request->input('token'))
+                                ->delete();
+
+                            DB::table('user_activate_token')->delete();
                         } else {
                             $this->addMessage('error', 'Cant update user.');
                         }
